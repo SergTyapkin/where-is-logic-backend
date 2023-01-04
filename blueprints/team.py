@@ -18,7 +18,10 @@ def register_callbacks():
                 'name': data['teamName'],
                 'count': 1
             }
-            DB.execute(sql.insertTeam, [data['teamName']])
+            try:
+                DB.execute(sql.insertTeam, [data['teamId'], data['teamName'], data['teamName']])
+            except:
+                pass
             teamsCount.append(foundTeam)
 
         WS.send_player_connected(data['userName'], foundTeam['id'], foundTeam['name'])
@@ -33,10 +36,16 @@ def register_callbacks():
 
                 if team['count'] <= 0:
                     teamsCount.remove(team)
-                    DB.execute(sql.deleteTeamByid, [team['id']])
+                    DB.execute(sql.deleteTeamByidIfNoScore, [team['id']])
                 return
     WS.setCallback("quit_from_team", quitFromTeam)
 
     def getAllTeams(client, data):
-        return WS.prepare_teams_count(teamsCount)
+        teams = DB.execute(sql.selectAllTeams, [], manyResults=True)
+        for team in teams:
+            for findTeam in teamsCount:
+                if team['id'] == findTeam['id']:
+                    team['count'] = findTeam['count']
+                    break
+        return WS.prepare_teams_count(teams)
     WS.setCallback("get_teams_count", getAllTeams)

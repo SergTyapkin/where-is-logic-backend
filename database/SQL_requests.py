@@ -1,12 +1,13 @@
 # ----- INSERTS -----
 insertTeam = \
-    "INSERT INTO teams (color) " \
-    "VALUES (%s) " \
+    "INSERT INTO teams (id, name, color) " \
+    "VALUES (%s, %s, %s) " \
     "RETURNING *"
 
 # ----- SELECTS -----
 selectAllTeams = \
-    "SELECT * FROM teams"
+    "SELECT * FROM teams " \
+    "ORDER BY score DESC"
 
 selectTeamById = \
     "SELECT * FROM teams " \
@@ -36,3 +37,8 @@ updateTeamScoreIncrementById = \
 deleteTeamByid = \
     "DELETE FROM teams " \
     "WHERE id = %s"
+
+deleteTeamByidIfNoScore = \
+    "DELETE FROM teams " \
+    "WHERE id = %s AND " \
+    "score <= 0"

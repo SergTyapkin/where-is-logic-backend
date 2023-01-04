@@ -32,3 +32,7 @@ def register_callbacks():
 
         WS.send_answer_result(data['result'])
     WS.setCallback("answer_result", answerResult)
+
+    def getAnsweringState(client, data):
+        return WS.prepare_answering_state(answeringTeam)
+    WS.setCallback("get_answering_state", getAnsweringState)

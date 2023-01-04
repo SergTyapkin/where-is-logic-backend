@@ -67,3 +67,11 @@ class WebSocket(CallbacksWebSocketServer):
                 "teams": teamsCount
             }
         }
+
+    def prepare_answering_state(self, answeringTeam):
+        return {
+            "event": "answering_state",
+            "data": {
+                "team": answeringTeam,
+            }
+        }
