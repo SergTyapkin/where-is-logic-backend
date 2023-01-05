@@ -32,7 +32,7 @@ class ErrorTypes(Enum):
 class CallbacksWebSocketServer:
     callbacks = {}
     state = States.created
-    _logger = False
+    _logger = None
     server = None
     mainThread = None
     callbackThreads = set()
@@ -43,6 +43,7 @@ class CallbacksWebSocketServer:
     def __init__(self, host: str = DEFAULT_HOST, port: int = DEFAULT_PORT, eventFieldName: str = "event",
                  dataFieldName: str = "data", logLevel: int = logging.INFO):
         self._logger = logging
+        self._logger.getLogger().setLevel(logLevel)
         self.eventName = eventFieldName
         self.dataName = dataFieldName
         self.host = host

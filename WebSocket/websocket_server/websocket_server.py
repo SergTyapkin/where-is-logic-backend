@@ -15,6 +15,7 @@ else:
     from socketserver import StreamRequestHandler, TCPServer, ThreadingMixIn
 
 logger = logging
+logger.getLogger().setLevel(logging.INFO)
 
 FIN = 0x80
 OPCODE = 0x0F

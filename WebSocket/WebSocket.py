@@ -52,11 +52,12 @@ class WebSocket(CallbacksWebSocketServer):
             }
         }))
 
-    def send_answer_result(self, result):
+    def send_answer_result(self, result, score):
         self.send_broadcast(json.dumps({
             "event": "answer_rated",
             "data": {
                 "result": result,
+                "score": score,
             }
         }))
 

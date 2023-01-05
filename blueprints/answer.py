@@ -19,8 +19,6 @@ def register_callbacks():
             'teamName': data['teamName'],
         }
 
-        DB.execute(sql.updateTeamScoreIncrementById, [data['teamId']])
-
         WS.send_team_answered(data['userName'], data['teamId'], data['teamName'])
     WS.setCallback("answer", answer)
 
@@ -28,9 +26,14 @@ def register_callbacks():
         global answeringTeam
         if answeringTeam is None:
             return
-        answeringTeam = None
 
-        WS.send_answer_result(data['result'])
+        if data['result']:
+            DB.execute(sql.updateTeamScoreIncrementById, [answeringTeam['teamId']])
+
+        team = DB.execute(sql.selectTeamById, [answeringTeam['teamId']])
+        WS.send_answer_result(data['result'], team['score'])
+
+        answeringTeam = None
     WS.setCallback("answer_result", answerResult)
 
     def getAnsweringState(client, data):
